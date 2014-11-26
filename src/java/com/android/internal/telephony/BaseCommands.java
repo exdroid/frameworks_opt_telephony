@@ -818,6 +818,14 @@ public abstract class BaseCommands implements CommandsInterface {
         return mRilVersion;
     }
 
+    /**
+     * @hide
+     */
+    @Override
+    public int getLteOnGsmMode() {
+        return TelephonyManager.getLteOnGsmModeStatic();
+    }
+
     public void setUiccSubscription(int slotId, int appIndex, int subId, int subStatus,
             Message response) {
     }
