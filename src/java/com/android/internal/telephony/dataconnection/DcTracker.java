@@ -148,12 +148,6 @@ public final class DcTracker extends DcTrackerBase {
     private BroadcastReceiver mProvisionBroadcastReceiver;
     private ProgressDialog mProvisioningSpinner;
 
-    /** Used to send us NetworkRequests from ConnectivityService.  Remeber it so we can
-     * unregister on dispose. */
-    private Messenger mNetworkFactoryMessenger;
-    private NetworkFactory mNetworkFactory;
-    private NetworkCapabilities mNetworkFilter;
-
     public boolean mImsRegistrationState = false;
     private ApnContext mWaitCleanUpApnContext = null;
     private boolean mDeregistrationAlarmState = false;
@@ -231,11 +225,6 @@ public final class DcTracker extends DcTrackerBase {
             mProvisioningSpinner.dismiss();
             mProvisioningSpinner = null;
         }
-
-        ConnectivityManager cm = (ConnectivityManager)mPhone.getContext().getSystemService(
-                Context.CONNECTIVITY_SERVICE);
-        cm.unregisterNetworkFactory(mNetworkFactoryMessenger);
-        mNetworkFactoryMessenger = null;
 
         cleanUpAllConnections(true, null);
 
@@ -2711,14 +2700,6 @@ public final class DcTracker extends DcTrackerBase {
                 //May new Network allow setupData, so try it here
                 setupDataOnConnectableApns(Phone.REASON_NW_TYPE_CHANGED,
                         RetryFailures.ONLY_ON_CHANGE);
-                break;
-
-            case DctConstants.CMD_CLEAR_PROVISIONING_SPINNER:
-                // Check message sender intended to clear the current spinner.
-                if (mProvisioningSpinner == msg.obj) {
-                    mProvisioningSpinner.dismiss();
-                    mProvisioningSpinner = null;
-                }
                 break;
 
             case DctConstants.CMD_CLEAR_PROVISIONING_SPINNER:
